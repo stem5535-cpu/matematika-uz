@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Matematika O'rganish</title>
+    <style>
+      :root {
+        --bg: #f4f7ff;
+        --panel: #ffffff;
+        --primary: #1d4ed8;
+        --primary-soft: #dbeafe;
+        --accent: #14b8a6;
+        --success: #22c55e;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --text: #0f172a;
+        --muted: #475569;
+        --line: #e2e8f0;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        color: var(--text);
+        background: linear-gradient(135deg, #eef6ff 0%, #f5f3ff 100%);
+      }
+
+      body {
+        min-height: 100vh;
+      }
+
+      .app {
+        max-width: 1280px;
+        margin: 24px auto;
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 20px;
+        padding: 0 16px 32px;
+      }
+
+      .sidebar,
+      .main-panel {
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        box-shadow: var(--shadow);
+      }
+
+      .sidebar {
+        padding: 20px 16px;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+      }
+
+      .brand {
+        font-size: 32px;
+        font-weight: 800;
+        color: var(--primary);
+        margin: 0 0 10px;
+        letter-spacing: 0.02em;
+      }
+
+      .subtitle {
+        color: var(--muted);
+        font-size: 13px;
+        line-height: 1.6;
+        margin-bottom: 20px;
+      }
+
+      .nav-item {
+        width: 100%;
+        background: white;
+        border: 1px solid transparent;
+        border-radius: 14px;
+        padding: 12px 14px;
+        text-align: left;
+        cursor: pointer;
+        margin: 8px 0;
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: 0.2s ease;
+      }
+
+      .nav-item:hover,
+      .nav-item.active {
+        background: var(--primary-soft);
+        border-color: #bfdbfe;
+        color: var(--primary);
+      }
+
+      .nav-count {
+        background: #eef2ff;
+        border-radius: 999px;
+        padding: 4px 8px;
+        font-size: 11px;
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .main-panel {
+        padding: 20px 20px 28px;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 18px;
+        flex-wrap: wrap;
+      }
+
+      .title {
+        font-size: 34px;
+        margin: 0;
+        color: var(--text);
+      }
+
+      .topic-chip {
+        background: var(--primary-soft);
+        color: var(--primary);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 12px;
+        font-weight: 700;
+      }
+
+      .progress-box {
+        background: #f8fafc;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        padding: 12px 14px;
+        margin-bottom: 20px;
+      }
+
+      .progress-header {
+        font-weight: 700;
+        margin-bottom: 10px;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 12px;
+        background: #e2e8f0;
+        border-radius: 999px;
+        overflow: hidden;
+      }
+
+      .progress-bar > span {
+        display: block;
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--primary), var(--accent));
+        border-radius: inherit;
+        transition: width 0.3s ease;
+      }
+
+      .topic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+        margin-bottom: 22px;
+      }
+
+      .topic-card {
+        background: linear-gradient(180deg, #fff, #f8fafc);
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 16px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .topic-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+      }
+
+      .topic-card.active {
+        border-color: #bfdbfe;
+        background: #eff6ff;
+      }
+
+      .topic-card h3 {
+        margin: 0 0 10px;
+        font-size: 18px;
+      }
+
+      .topic-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .topic-card ul li::before {
+        content: '• ';
+        color: var(--accent);
+        font-weight: bold;
+      }
+
+      .lesson-box {
+        background: #f8fafc;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 20px;
+        margin-bottom: 22px;
+      }
+
+      .lesson-box h2 {
+        margin: 0 0 16px;
+        font-size: 28px;
+        color: var(--primary);
+      }
+
+      .lesson-box p,
+      .lesson-box li {
+        font-size: 16px;
+        line-height: 1.8;
+        color: var(--text);
+      }
+
+      .example-box {
+        background: white;
+        border-left: 5px solid var(--accent);
+        border-radius: 12px;
+        border: 1px solid var(--line);
+        padding: 16px 18px;
+        margin: 18px 0;
+        font-weight: 700;
+        line-height: 1.7;
+      }
+
+      .quiz-box {
+        background: linear-gradient(135deg, #ecfdf5, #ecfeff);
+        border: 1px solid #bbf7d0;
+        border-radius: 18px;
+        padding: 20px;
+      }
+
+      .quiz-box h3 {
+        margin: 0 0 10px;
+        font-size: 24px;
+        color: #0f766e;
+      }
+
+      .question {
+        border-top: 1px solid rgba(15, 118, 110, 0.15);
+        padding-top: 18px;
+        margin-top: 18px;
+      }
+
+      .question strong {
+        display: block;
+        margin-bottom: 12px;
+        font-size: 18px;
+      }
+
+      .option {
+        display: block;
+        width: 100%;
+        background: white;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+        cursor: pointer;
+        text-align: left;
+        margin: 8px 0;
+        font-size: 15px;
+        transition: 0.2s ease;
+      }
+
+      .option:hover {
+        border-color: var(--primary);
+        background: #eff6ff;
+      }
+
+      .option.correct {
+        background: rgba(34, 197, 94, 0.12);
+        border-color: var(--success);
+        color: #166534;
+        font-weight: 700;
+      }
+
+      .option.wrong {
+        background: rgba(239, 68, 68, 0.08);
+        border-color: var(--danger);
+        color: #991b1b;
+        font-weight: 700;
+      }
+
+      .check-btn {
+        margin-top: 16px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 18px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .result {
+        margin-top: 18px;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      @media (max-width: 900px) {
+        .app {
+          grid-template-columns: 1fr;
+        }
+
+        .sidebar {
+          position: static;
+        }
+
+        .title {
+          font-size: 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <aside class="sidebar">
+        <h1 class="brand">Matematika</h1>
+        <div class="subtitle">
+          0 dan boshlab, amaliy va tushunarli tarzda matematikani o'rganing.
+        </div>
+        <div id="nav"></div>
+      </aside>
+
+      <main class="main-panel">
+        <div class="topbar">
+          <h2 id="mainTitle" class="title">Matematika kursi</h2>
+          <div id="topicChip" class="topic-chip">Tanlangan mavzu</div>
+        </div>
+
+        <div class="progress-box">
+          <div class="progress-header">Progress</div>
+          <div class="progress-bar">
+            <span id="progressBar"></span>
+          </div>
+        </div>
+
+        <div id="topicGrid" class="topic-grid"></div>
+
+        <section class="lesson-box">
+          <h2 id="lessonTitle">Mavzu tanlang</h2>
+          <div id="lessonContent"></div>
+        </section>
+
+        <section class="quiz-box">
+          <h3>Bilimingni tekshiring</h3>
+          <div id="quiz"></div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      const curriculum = {
+        "sonlar-va-arifmetika": {
+          title: "Sonlar va arifmetika",
+          subtopics: [
+            {
+              name: "Butun sonlar",
+              lesson: `
+                <p><strong>Butun sonlar</strong> — 0, 1, 2, 3, ... va manfiy sonlar bilan birga nolni o'z ichiga oladi.</p>
+                <p>Masalan: -5, -2, 0, 3, 8 butun sonlardir.</p>
+                <div class="example-box">
+                  7 + 3 = 10 <br>
+                  12 - 5 = 7 <br>
+                  4 × 6 = 24
+                </div>
+                <p><strong>Asosiy qoidalar:</strong></p>
+                <ul>
+                  <li>Bir xil ishorali sonlarni qo'shsak, natija shunga o'xshash bo'ladi.</li>
+                  <li>Turli ishorali sonlarni qo'shishda ishoralar hisobga olinadi.</li>
+                  <li>Ko'paytirishda musbat × musbat = musbat, manfiy × manfiy = musbat, musbat × manfiy = manfiy.</li>
+                </ul>
+              `
+            },
+            {
+              name: "Bo'linish, tub sonlar va qoldiq",
+              lesson: `
+                <p>Sonning <strong>bo'linishi</strong> deganda, boshqa songa qoldiqsiz bo'linishi tushuniladi.</p>
+                <p>Masalan, 18 soni 3 ga qoldiqsiz bo'linadi, chunki 18 ÷ 3 = 6.</p>
+                <div class="example-box">
+                  21 ÷ 7 = 3 (qoldiq 0) <br>
+                  20 ÷ 6 = 3 (qoldiq 2)
+                </div>
+                <p><strong>Tub son</strong> — 1 dan va o'zidan boshqa bo'luvchisi bo'lmagan son.</p>
+                <p>Masalan: 2, 3, 5, 7, 11, 13 tub sonlardir.</p>
+                <p>Qoldiq — bo'linishda oxirgi paydo bo'luvchi qism. Masalan, 17 ÷ 5 = 3 qoldiq 2.</p>
+              `
+            },
+            {
+              name: "Oddiy kasrlar",
+              lesson: `
+                <p><strong>Oddiy kasr</strong> ikkita qismdan iborat: surat va maxraj. Masalan: 3/5, 7/9, 11/12.</p>
+                <p>Surat ustun qismi, maxraj esa qancha teng qismga bo'linganini bildiradi.</p>
+                <div class="example-box">
+                  3/5 → 5 ta teng qismdan 3 tasi olindi
+                </div>
+                <p>Kasrlarni qo'shish va ayirishda maxrajlar bir xil bo'lsa, faqat suratlar qo'shiladi yoki ayiriladi.</p>
+                <p>Masalan: 1/4 + 2/4 = 3/4.</p>
+              `
+            },
+            {
+              name: "O'nli kasrlar",
+              lesson: `
+                <p><strong>O'nli kasr</strong> — butun qism va kasr qismdan iborat son.</p>
+                <p>Masalan: 2.5, 0.75, 12.08.</p>
+                <div class="example-box">
+                  1.2 + 0.3 = 1.5 <br>
+                  4.8 - 1.2 = 3.6
+                </div>
+                <p>O'nli kasrlar oddiy kasrga ham aylantirilishi mumkin: 0.5 = 1/2.</p>
+              `
+            },
+            {
+              name: "Foizlar",
+              lesson: `
+                <p><strong>Foiz</strong> — 100 ta qismdan bittasi. % belgisi bilan yoziladi.</p>
+                <p>Masalan: 25% = 25/100 = 0.25.</p>
+                <div class="example-box">
+                  200 ning 20% = 200 × 0.20 = 40
+                </div>
+                <p>Foizlar chegirma, soliq, foyda, zarar va boshqalar bilan ishlatiladi.</p>
+              `
+            },
+            {
+              name: "Nisbat va proporsiya",
+              lesson: `
+                <p><strong>Nisbat</strong> — ikki sonni taqqoslashdir. Masalan: 3 : 5 yoki 3/5.</p>
+                <p><strong>Proporsiya</strong> — ikki nisbatning tengligi. Masalan: 2/3 = 4/6.</p>
+                <div class="example-box">
+                  Agar 2 kg olma 60 ming bo'lsa, 5 kg olma qancha bo'ladi? <br>
+                  2 : 60 = 5 : x <br>
+                  x = 150
+                </div>
+              `
+            },
+            {
+              name: "Daraja",
+              lesson: `
+                <p><strong>Daraja</strong> — bir xil sonni bir necha marta ko'paytirish.</p>
+                <p>3² = 3 × 3 = 9, bu yerda 3 — asos, 2 — daraja ko'rsatkichi.</p>
+                <div class="example-box">
+                  5³ = 5 × 5 × 5 = 125
+                </div>
+                <p>Daraja qoidalari: x² × x³ = x⁵, x⁶ ÷ x² = x⁴.</p>
+              `
+            },
+            {
+              name: "Ildiz",
+              lesson: `
+                <p><strong>Ildiz</strong> — berilgan sonni hosil qiluvchi sonni topish.</p>
+                <p>√9 = 3, chunki 3 × 3 = 9.</p>
+                <div class="example-box">
+                  √16 = 4 <br>
+                  √25 = 5
+                </div>
+                <p>Ildiz ko'pincha kvadrat yoki kubning tomonini topishda ishlatiladi.</p>
+              `
+            },
+            {
+              name: "Modul",
+              lesson: `
+                <p><strong>Modul</strong> — sonning musbat qiymati. |x| bilan belgilanadi.</p>
+                <p>Masalan: |-7| = 7, |5| = 5.</p>
+                <div class="example-box">
+                  |-12| = 12 <br>
+                  |3| = 3
+                </div>
+                <p>Modul sonning masofasi yoki “manfiy bo'lmagan qiymati” haqida gapiradi.</p>
+              `
+            },
+            {
+              name: "Sonlar o'qi",
+              lesson: `
+                <p><strong>Sonlar o'qi</strong> — sonlarni ketma-ket joylashtirish uchun chiziq.</p>
+                <p>0 o'rtada bo'lib, chap tomonda manfiy sonlar, o'ng tomonda musbat sonlar turgan bo'ladi.</p>
+                <div class="example-box">
+                  ... -3, -2, -1, 0, 1, 2, 3 ...
+                </div>
+                <p>Sonlar o‘qida son kattalashgani sari o‘ngga, kichiklashgani sari chapga siljiydi.</p>
+              `
+            }
+          ]
+        },
+        "algebra": {
+          title: "Algebra",
+          subtopics: [
+            {
+              name: "Qisqa ko'paytirish formulalari",
+              lesson: `
+                <p><strong>Qisqa ko'paytirish formulalari</strong> katta ifodalarni tezroq ko'paytirishga yordam beradi.</p>
+                <div class="example-box">
+                  (a + b)² = a² + 2ab + b² <br>
+                  (a - b)² = a² - 2ab + b² <br>
+                  (a + b)(a - b) = a² - b²
+                </div>
+                <p>Masalan: (x + 3)² = x² + 6x + 9.</p>
+              `
+            },
+            {
+              name: "Chiziqli tenglamalar",
+              lesson: `
+                <p><strong>Chiziqli tenglama</strong> — noma'lum birinchi darajali bo'lgan tenglama.</p>
+                <p>Masalan: 2x + 5 = 13.</p>
+                <div class="example-box">
+                  2x + 5 = 13 <br>
+                  2x = 8 <br>
+                  x = 4
+                </div>
+                <p>Biror noma'lumni topish uchun tenglamaning ikki tomoniga ham bir xil amalni bajaramiz.</p>
+              `
+            },
+            {
+              name: "Tenglamalar sistemasi",
+              lesson: `
+                <p><strong>Tenglamalar sistemasi</strong> — bir vaqtda bajariladigan bir nechta tenglamalar.</p>
+                <p>Masalan:</p>
+                <div class="example-box">
+                  x + y = 7 <br>
+                  x - y = 1
+                </div>
+                <p>Bu sistemadan x = 4, y = 3 ni topamiz.</p>
+              `
+            },
+            {
+              name: "Chiziqli tengsizliklar",
+              lesson: `
+                <p><strong>Tengsizlik</strong> — "kichik", "katta", "kichik yoki teng", "katta yoki teng" munosabatlarini ifodalaydi.</p>
+                <div class="example-box">
+                  2x + 3 < 11 <br>
+                  2x < 8 <br>
+                  x < 4
+                </div>
+                <p>Tengsizlikda yechimlar sonlar to'plami yoki oralik ko'rinishida yoziladi.</p>
+              `
+            },
+            {
+              name: "Funksiya",
+              lesson: `
+                <p><strong>Funksiya</strong> — kirish qiymatiga bitta natija mos keladigan munosabat.</p>
+                <p>Masalan: y = 2x + 1.</p>
+                <div class="example-box">
+                  x = 3 bo'lsa, y = 2×3 + 1 = 7
+                </div>
+                <p>Funksiya ko'pincha jadval yoki grafikda tasvirlanadi.</p>
+              `
+            },
+            {
+              name: "Ketma-ketlik va progressiya",
+              lesson: `
+                <p><strong>Ketma-ketlik</strong> — sonlar tartiblangan ro'yxati.</p>
+                <p><strong>Arifmetik progressiya</strong> — har bir keyingi had oldingisidan bir xil son bilan farq qiladi.</p>
+                <div class="example-box">
+                  2, 5, 8, 11, 14 ... <br>
+                  Har qadami +3
+                </div>
+                <p><strong>Geometrik progressiya</strong> — har bir keyingi had oldingisidan bir xil son bilan ko'paytiriladi.</p>
+              `
+            }
+          ]
+        },
+        "masalalar-va-mantiq": {
+          title: "Masalalar va mantiq",
+          subtopics: [
+            {
+              name: "Sonlar haqida masalalar",
+              lesson: `
+                <p>Sonlar haqidagi masalalar ko'pincha ma'lumotlarni to'g'ri tahlil qilishga yordam beradi.</p>
+                <div class="example-box">
+                  8 ta olma bor. 3 tasi sotildi. Qolgan olma soni qancha? <br>
+                  8 - 3 = 5
+                </div>
+                <p>Masalalarni yechishda: ma'lumotlarni ajratish, nima so'ralayotganini aniqlash va amallarni to'g'ri tanlash muhim.</p>
+              `
+            },
+            {
+              name: "Nostandart savollar va mantiq",
+              lesson: `
+                <p>Nostandart savollar mantiqiy fikrlashni rivojlantiradi.</p>
+                <div class="example-box">
+                  3 ta bola bor. Har biri 2 ta shokolad oldi. Hammasi nechta shokolad oldi?<br>
+                  3 × 2 = 6
+                </div>
+                <p>Mantiqiy savollar da'vo qilish, xulosalar chiqarish va qaror qabul qilishni o'rgatadi.</p>
+              `
+            },
+            {
+              name: "Faktorial va kombinatorika",
+              lesson: `
+                <p><strong>Faktorial</strong> — sonni 1 dan boshlab barcha natural sonlarga ko'paytirish.</p>
+                <p>5! = 5 × 4 × 3 × 2 × 1 = 120.</p>
+                <p><strong>Kombinatorika</strong> — tartiblangan yoki tartibsiz tanlovlar sonini hisoblashga oid bo'lim.</p>
+              `
+            },
+            {
+              name: "Ehtimollik",
+              lesson: `
+                <p><strong>Ehtimollik</strong> — hodisaning sodir bo'lish imkoniyati.</p>
+                <p>Masalan, gerb 1/2, to'g'ri 1/2 ehtimollik bilan tushadi.</p>
+                <div class="example-box">
+                  6 ta kubik to'pning 2 tasi qizil. Tasodifan tanlangan topning qizil bo'lish ehtimoli = 2/6 = 1/3
+                </div>
+              `
+            }
+          ]
+        },
+        "geometriya": {
+          title: "Geometriya",
+          subtopics: [
+            {
+              name: "To'rtburchaklar",
+              lesson: `
+                <p><strong>To'rtburchak</strong> 4 ta tomoni va 4 ta burchagi bo'lgan shakl.</p>
+                <p>To'g'ri to'rtburchakda qarama-qarshi tomonlar teng va barcha burchaklar 90°.</p>
+                <div class="example-box">
+                  Perimetri = (a + b) × 2 <br>
+                  Yuzasi = a × b
+                </div>
+              `
+            },
+            {
+              name: "Uchburchaklar",
+              lesson: `
+                <p><strong>Uchburchak</strong> 3 ta tomon va 3 ta burchakdan tashkil topgan shakl.</p>
+                <p>Uchburchaklarning asosiy turi: teng yonli, teng tomonli, to'g'ri burchakli.</p>
+                <div class="example-box">
+                  Uchburchak perimetri = a + b + c
+                </div>
+              `
+            },
+            {
+              name: "Aylana va doira",
+              lesson: `
+                <p><strong>Aylana</strong> — markazdan teng masofada yotgan nuqtalar to'plami.</p>
+                <p><strong>Doira</strong> — aylananing ichki qismi.</p>
+                <div class="example-box">
+                  Aylana uzunligi = 2πr <br>
+                  Doira yuzi = πr²
+                </div>
+              `
+            },
+            {
+              name: "Burchaklar",
+              lesson: `
+                <p>Burchaklar <strong>gradus</strong> bilan o'lchanadi.</p>
+                <p>To'g'ri burchak 90°, o'tkir burchak 90° dan kichik, o'tkir bo'lmagan burchak 90° dan katta.</p>
+                <div class="example-box">
+                  30° — o'tkir burchak <br>
+                  90° — to'g'ri burchak <br>
+                  120° — o'tkir bo'lmagan burchak
+                </div>
+              `
+            },
+            {
+              name: "Stereometriya va ko'pyoqlar",
+              lesson: `
+                <p><strong>Stereometriya</strong> — fazodagi shakllar haqidagi bo'lim.</p>
+                <p><strong>Ko'pyoqlar</strong> 3D shakllar: kub, parallelepiped, piramida, silindr va boshqalar.</p>
+              `
+            },
+            {
+              name: "Koordinatalar sistemasi",
+              lesson: `
+                <p><strong>Koordinatalar sistemasi</strong> nuqtalarni joylashtirish uchun ishlatiladi.</p>
+                <p>Tekislikda x va y o'qlari bo'ladi, fazoda x, y, z o'qlari bo'ladi.</p>
+                <div class="example-box">
+                  A(2, 3) nuqta 2 birlik o'ngga va 3 birlik yuqoriga joylashgan.
+                </div>
+              `
+            }
+          ]
+        },
+        "ma-lumotlar-bilan-ishlash": {
+          title: "Ma'lumotlar bilan ishlash",
+          subtopics: [
+            {
+              name: "Diagrammalar",
+              lesson: `
+                <p><strong>Diagrammalar</strong> ma'lumotlarni vizual ko'rinishda taqdim etishni osonlashtiradi.</p>
+                <p>Ular orasida ustunli, doiraviy, chiziqli diagrammalar mavjud.</p>
+                <div class="example-box">
+                  5 ta talaba: 3 tasi matematika, 2 tasi fizika yoqtiradi. Diagramma ko'rsatib beriladi.
+                </div>
+              `
+            },
+            {
+              name: "Statistika",
+              lesson: `
+                <p><strong>Statistika</strong> ma'lumotlarni to'plash, ko'rib chiqish va xulosa chiqarish fanidir.</p>
+                <p>O'rtacha qiymat, moda, medianalar statistikada muhim hisoblanadi.</p>
+              `
+            }
+          ]
+        }
+      };
+
+      const nav = document.getElementById("nav");
+      const topicGrid = document.getElementById("topicGrid");
+      const mainTitle = document.getElementById("mainTitle");
+      const topicChip = document.getElementById("topicChip");
+      const lessonTitle = document.getElementById("lessonTitle");
+      const lessonContent = document.getElementById("lessonContent");
+      const quizContainer = document.getElementById("quiz");
+      const progressBar = document.getElementById("progressBar");
+
+      let selectedCategory = "sonlar-va-arifmetika";
+      let selectedSubtopic = 0;
+
+      function renderNav() {
+        nav.innerHTML = "";
+        Object.entries(curriculum).forEach(([key, value]) => {
+          const btn = document.createElement("button");
+          btn.className = "nav-item" + (selectedCategory === key ? " active" : "");
+          btn.innerHTML = `
+            <span>${value.title}</span>
+            <span class="nav-count">${value.subtopics.length}</span>
+          `;
+          btn.onclick = () => {
+            selectedCategory = key;
+            selectedSubtopic = 0;
+            render();
+          };
+          nav.appendChild(btn);
+        });
+      }
+
+      function renderTopicGrid() {
+        topicGrid.innerHTML = "";
+        const items = curriculum[selectedCategory].subtopics;
+
+        items.forEach((item, index) => {
+          const card = document.createElement("div");
+          card.className = "topic-card" + (index === selectedSubtopic ? " active" : "");
+          card.innerHTML = `
+            <h3>${item.name}</h3>
+            <ul>
+              <li>Asosiy tushuncha</li>
+              <li>Misol</li>
+              <li>Amaliy mashq</li>
+            </ul>
+          `;
+          card.onclick = () => {
+            selectedSubtopic = index;
+            render();
+          };
+          topicGrid.appendChild(card);
+        });
+      }
+
+      function renderLesson() {
+        const category = curriculum[selectedCategory];
+        const topic = category.subtopics[selectedSubtopic];
+        mainTitle.textContent = category.title;
+        topicChip.textContent = `${category.title} · ${category.subtopics.length} mavzu`;
+        lessonTitle.textContent = topic.name;
+        lessonContent.innerHTML = topic.lesson;
+      }
+
+      function renderProgress() {
+        const keys = Object.keys(curriculum);
+        const currentIndex = keys.indexOf(selectedCategory);
+        const progressPercent = ((currentIndex + 1) / keys.length) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+      }
+
+      function renderQuiz() {
+        const quizData = [
+          { q: "12 + 7 = ?", options: ["17", "19", "18", "20"], correct: "19" },
+          { q: "5² ni hisoblang.", options: ["10", "25", "15", "20"], correct: "25" },
+          { q: "3/4 + 1/4 = ?", options: ["1/2", "1", "3/8", "4/4"], correct: "1" },
+          { q: "√16 = ?", options: ["4", "8", "2", "16"], correct: "4" },
+          { q: "2x + 3 = 11 tenglamada x = ?", options: ["3", "4", "5", "2"], correct: "4" }
+        ];
+
+        quizContainer.innerHTML = "";
+
+        quizData.forEach((item, index) => {
+          const wrap = document.createElement("div");
+          wrap.className = "question";
+
+          const qText = document.createElement("strong");
+          qText.textContent = `${index + 1}. ${item.q}`;
+          wrap.appendChild(qText);
+
+          item.options.forEach(opt => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "option";
+            btn.textContent = opt;
+            btn.onclick = () => {
+              const options = wrap.querySelectorAll(".option");
+              options.forEach(el => {
+                el.classList.remove("correct", "wrong");
+              });
+
+              if (opt === item.correct) {
+                btn.classList.add("correct");
+              } else {
+                btn.classList.add("wrong");
+                options.forEach(el => {
+                  if (el.textContent === item.correct) el.classList.add("correct");
+                });
+              }
+            };
+            wrap.appendChild(btn);
+          });
+
+          quizContainer.appendChild(wrap);
+        });
+
+        const button = document.createElement("button");
+        button.className = "check-btn";
+        button.textContent = "Javoblarni tekshirish";
+        button.onclick = () => {
+          const allQuestions = quizContainer.querySelectorAll(".question");
+          let correctCount = 0;
+
+          allQuestions.forEach(questionWrap => {
+            const chosen = questionWrap.querySelector(".option.correct");
+            if (chosen) correctCount++;
+          });
+
+          const result = document.createElement("div");
+          result.className = "result";
+          result.textContent = `Siz ${correctCount} ta to'g'ri javob berdingiz.`;
+
+          const oldResult = document.querySelector(".result");
+          if (oldResult) oldResult.remove();
+
+          quizContainer.appendChild(result);
+        };
+
+        quizContainer.appendChild(button);
+      }
+
+      function render() {
+        renderNav();
+        renderTopicGrid();
+        renderLesson();
+        renderProgress();
+        renderQuiz();
+      }
+
+      render();
+    </script>
+  </body>
+</html>
